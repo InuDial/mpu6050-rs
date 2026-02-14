@@ -1,6 +1,6 @@
-# mpu6500
+# mpu6050
 
-高效、易用的 MPU6500 六轴传感器 Rust 驱动库，支持 async/await，适用于嵌入式平台。
+高效、易用的 MPU6050 六轴传感器 Rust 驱动库，支持 async/await，适用于嵌入式平台。
 
 ## 特性
 
@@ -19,7 +19,7 @@
 ### 基本使用（浮点数）
 
 ```rust
-use mpu6500::{Mpu6500, config::NewConfigBuilder, SensorData};
+use mpu6050::{Mpu6050, config::NewConfigBuilder, SensorData};
 
 #[embassy_executor::main]
 async fn main(_spawner: embassy_executor::Spawner) {
@@ -34,8 +34,8 @@ async fn main(_spawner: embassy_executor::Spawner) {
         .build()
         .unwrap();
 
-    // 创建MPU6500实例（默认使用f32）
-    let mut mpu: Mpu6500<_, _, f32> = Mpu6500::new(spi, cs, config);
+    // 创建MPU6050实例（默认使用f32）
+    let mut mpu: Mpu6050<_, _, f32> = Mpu6050::new(spi, cs, config);
 
     mpu.init_with_config().await.unwrap();
     mpu.calibrate_sensors(1000).await.unwrap();
@@ -50,7 +50,7 @@ async fn main(_spawner: embassy_executor::Spawner) {
 ### 定点数支持（资源受限系统）
 
 ```rust
-use mpu6500::{Mpu6500, config::NewConfigBuilder, SensorData, FixedI16F16};
+use mpu6050::{Mpu6050, config::NewConfigBuilder, SensorData, FixedI16F16};
 
 // 使用定点数类型，节省内存和计算资源
 let config = NewConfigBuilder::low_power()
@@ -58,7 +58,7 @@ let config = NewConfigBuilder::low_power()
     .build()
     .unwrap();
 
-let mut mpu: Mpu6500<_, _, FixedI16F16> = Mpu6500::new(spi, cs, config);
+let mut mpu: Mpu6050<_, _, FixedI16F16> = Mpu6050::new(spi, cs, config);
 
 let data: SensorData<FixedI16F16> = mpu.read_all().await.unwrap();
 let accel_magnitude = {
@@ -75,7 +75,7 @@ let magnitude_f32 = accel_magnitude.to_f32();
 库提供了多种预设配置，适用于不同的应用场景：
 
 ```rust
-use mpu6500::config::NewConfigBuilder;
+use mpu6050::config::NewConfigBuilder;
 
 // 高精度配置（低噪声，高分辨率）
 let high_precision = NewConfigBuilder::high_precision().build().unwrap();
@@ -96,7 +96,7 @@ let attitude_estimation = NewConfigBuilder::attitude_estimation().build().unwrap
 ### 自定义配置
 
 ```rust
-use mpu6500::config::{NewConfigBuilder, AccelScale, GyroScale, DlpfConfig};
+use mpu6050::config::{NewConfigBuilder, AccelScale, GyroScale, DlpfConfig};
 
 let config = NewConfigBuilder::new()
     .accel_scale(AccelScale::Scale4G)
@@ -121,7 +121,7 @@ let config = NewConfigBuilder::new()
 ### 数值类型转换
 
 ```rust
-use mpu6500::{NumericType, FixedI16F16};
+use mpu6050::{NumericType, FixedI16F16};
 
 // 从原始传感器数据转换
 let raw_value: i16 = 1000;
@@ -150,7 +150,7 @@ let radians = degrees * f32::deg_to_rad();
 库提供了统一的错误处理机制：
 
 ```rust
-use mpu6500::{Mpu6500Error, Result};
+use mpu6050::{Mpu6050Error, Result};
 
 // 使用Result类型
 let config = NewConfigBuilder::new()
@@ -160,9 +160,9 @@ let config = NewConfigBuilder::new()
 // 匹配具体错误类型
 match mpu.init_with_config().await {
     Ok(_) => println!("初始化成功"),
-    Err(Mpu6500Error::Spi(e)) => println!("SPI通信错误: {:?}", e),
-    Err(Mpu6500Error::DeviceNotFound) => println!("设备未找到"),
-    Err(Mpu6500Error::InvalidConfig) => println!("配置无效"),
+    Err(Mpu6050Error::Spi(e)) => println!("SPI通信错误: {:?}", e),
+    Err(Mpu6050Error::DeviceNotFound) => println!("设备未找到"),
+    Err(Mpu6050Error::InvalidConfig) => println!("配置无效"),
     Err(e) => println!("其他错误: {:?}", e),
 }
 ```
@@ -173,13 +173,13 @@ match mpu.init_with_config().await {
 
 ```rust
 // 新的泛型版本
-use mpu6500::{Mpu6500, SensorData};
-let mpu: Mpu6500<_, _, f32> = Mpu6500::new(spi, cs, config);
+use mpu6050::{Mpu6050, SensorData};
+let mpu: Mpu6050<_, _, f32> = Mpu6050::new(spi, cs, config);
 let data: SensorData<f32> = mpu.read_all().await?;
 
 // 向后兼容的别名
-use mpu6500::{Mpu6500F32, SensorDataF32};
-let mpu: Mpu6500F32<_, _> = Mpu6500::new(spi, cs, config);
+use mpu6050::{Mpu6050F32, SensorDataF32};
+let mpu: Mpu6050F32<_, _> = Mpu6050::new(spi, cs, config);
 let data: SensorDataF32 = mpu.read_all().await?;
 ```
 
@@ -217,23 +217,23 @@ let data: SensorDataF32 = mpu.read_all().await?;
 
 ### 设备操作
 
-- `Mpu6500::new()`：创建 MPU6500 实例（支持泛型数值类型）
-- `Mpu6500::init_with_config()`：初始化并写入配置
-- `Mpu6500::calibrate_sensors()`：校准加速度计和陀螺仪
-- `Mpu6500::who_am_i()`：读取设备 ID
+- `Mpu6050::new()`：创建 MPU6050 实例（支持泛型数值类型）
+- `Mpu6050::init_with_config()`：初始化并写入配置
+- `Mpu6050::calibrate_sensors()`：校准加速度计和陀螺仪
+- `Mpu6050::who_am_i()`：读取设备 ID
 
 ### 数据读取
 
-- `Mpu6500::read_all()`：读取所有传感器数据（泛型版本）
-- `Mpu6500::read_accel()`：读取加速度计数据
-- `Mpu6500::read_gyro()`：读取陀螺仪数据
-- `Mpu6500::read_temp()`：读取温度数据
+- `Mpu6050::read_all()`：读取所有传感器数据（泛型版本）
+- `Mpu6050::read_accel()`：读取加速度计数据
+- `Mpu6050::read_gyro()`：读取陀螺仪数据
+- `Mpu6050::read_temp()`：读取温度数据
 
 ### 高级功能
 
-- `Mpu6500::enable_fifo()` / `read_fifo_data()`：FIFO 操作
-- `Mpu6500::enable_interrupts()` / `read_interrupt_status()`：中断操作
-- `Mpu6500::calculate_pitch_roll_from_accel()`：基于加速度计的姿态计算
+- `Mpu6050::enable_fifo()` / `read_fifo_data()`：FIFO 操作
+- `Mpu6050::enable_interrupts()` / `read_interrupt_status()`：中断操作
+- `Mpu6050::calculate_pitch_roll_from_accel()`：基于加速度计的姿态计算
 
 ### 数值类型
 
@@ -241,7 +241,7 @@ let data: SensorDataF32 = mpu.read_all().await?;
 - `FixedI16F16`、`FixedI8F24`：定点数类型
 - `NumericConverter`：数值转换工具
 
-更多详细信息见 [API 文档](https://docs.rs/mpu6500)
+更多详细信息见 [API 文档](https://docs.rs/mpu6050)
 
 ## 依赖与兼容性
 

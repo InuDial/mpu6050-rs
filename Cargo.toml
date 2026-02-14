@@ -1,19 +1,17 @@
 [package]
 authors = ["Alddp <1906701331@qq.com>"]
 edition = "2024"
-name = "mpu6500"
+name = "mpu6050"
 version = "0.2.0"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/Alddp/mpu6500"
-documentation = "https://docs.rs/mpu6500"
-description = "高效、易用的 MPU6500 六轴传感器 Rust 驱动库，支持 async/await"
+description = "高效、易用的 MPU6050 六轴传感器 Rust 驱动库，支持 async/await"
 readme = "README.md"
 categories = ["embedded", "hardware-support", "no-std"]
-keywords = ["mpu6500", "imu", "embedded-hal", "async"]
+keywords = ["mpu6050", "imu", "embedded-hal", "async"]
 
 [dependencies]
 embedded-hal-async = { version = "1.0.0" }
-embassy-time = { version = "0.4.0", git = "https://github.com/embassy-rs/embassy.git" }
+embassy-time = { version = "0.5.0"}
 embedded-hal = { version = "1.0.0" }
 libm = "0.2.15"
 fixed = { version = "1.29.0", default-features = false }

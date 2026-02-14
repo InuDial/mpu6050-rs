@@ -5,7 +5,7 @@
 pub use builder::ConfigBuilder as NewConfigBuilder;
 pub use clock::*;
 pub use config_struct::{
-    AccelScale, ClockSource, ConfigBuilder, GyroScale, Mpu6500Config, calculate_sample_rate_divider,
+    AccelScale, ClockSource, ConfigBuilder, GyroScale, Mpu6050Config, calculate_sample_rate_divider,
 };
 pub use interrupt::*;
 pub use scale::*;

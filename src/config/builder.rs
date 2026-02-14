@@ -3,7 +3,7 @@
 //! 提供类型安全的配置构建功能
 
 use super::*;
-use crate::error::{ConfigValidation, Mpu6500Error};
+use crate::error::{ConfigValidation, Mpu6050Error};
 
 /// 改进的配置构建器
 #[derive(Debug, Clone)]
@@ -94,8 +94,8 @@ impl ConfigBuilder {
     }
 
     /// 构建配置
-    pub fn build(self) -> core::result::Result<Mpu6500Config, Mpu6500Error<()>> {
-        let config = Mpu6500Config {
+    pub fn build(self) -> core::result::Result<Mpu6050Config, Mpu6050Error<()>> {
+        let config = Mpu6050Config {
             accel_scale: self.accel_scale,
             gyro_scale: self.gyro_scale,
             dlpf_config: self.dlpf_config,
@@ -111,8 +111,8 @@ impl ConfigBuilder {
     }
 
     /// 构建配置（不验证）
-    pub fn build_unchecked(self) -> Mpu6500Config {
-        Mpu6500Config {
+    pub fn build_unchecked(self) -> Mpu6050Config {
+        Mpu6050Config {
             accel_scale: self.accel_scale,
             gyro_scale: self.gyro_scale,
             dlpf_config: self.dlpf_config,
@@ -175,16 +175,16 @@ impl ConfigBuilder {
     }
 }
 
-impl ConfigValidation for Mpu6500Config {
-    fn validate(&self) -> core::result::Result<(), Mpu6500Error<()>> {
+impl ConfigValidation for Mpu6050Config {
+    fn validate(&self) -> core::result::Result<(), Mpu6050Error<()>> {
         // 验证采样率范围
         if self.sample_rate < 4 || self.sample_rate > 1000 {
-            return Err(Mpu6500Error::InvalidConfig);
+            return Err(Mpu6050Error::InvalidConfig);
         }
 
         // 验证低功耗模式下的配置
         if self.low_power_mode && self.sample_rate > 100 {
-            return Err(Mpu6500Error::InvalidConfig);
+            return Err(Mpu6050Error::InvalidConfig);
         }
 
         // 验证FIFO和中断的兼容性

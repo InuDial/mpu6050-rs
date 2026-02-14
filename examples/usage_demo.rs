@@ -1,4 +1,4 @@
-//! MPU6500使用示例
+//! MPU6050使用示例
 //! 
 //! 展示如何使用新的泛型API和配置系统
 //! 
@@ -7,9 +7,9 @@
 #![no_std]
 #![no_main]
 
-use mpu6500::{
+use mpu6050::{
     config::NewConfigBuilder,
-    Mpu6500, SensorData, NumericType,
+    Mpu6050, SensorData, NumericType,
     FixedI16F16, // 定点数类型
 };
 
@@ -32,8 +32,8 @@ async fn example_with_f32() -> Result<(), ()> {
         .build()
         .map_err(|_| ())?;
     
-    // 创建MPU6500实例（默认使用f32）
-    // let mut mpu: Mpu6500<_, _, f32> = Mpu6500::new(spi, cs, config);
+    // 创建MPU6050实例（默认使用f32）
+    // let mut mpu: Mpu6050<_, _, f32> = Mpu6050::new(spi, cs, config);
     
     // 初始化设备
     // mpu.init_with_config().await.map_err(|_| ())?;
@@ -63,8 +63,8 @@ async fn example_with_fixed_point() -> Result<(), ()> {
         .build()
         .map_err(|_| ())?;
     
-    // 创建使用定点数的MPU6500实例
-    // let mut mpu: Mpu6500<_, _, FixedI16F16> = Mpu6500::new(spi, cs, config);
+    // 创建使用定点数的MPU6050实例
+    // let mut mpu: Mpu6050<_, _, FixedI16F16> = Mpu6050::new(spi, cs, config);
     
     // 初始化和校准
     // mpu.init_with_config().await.map_err(|_| ())?;
@@ -89,16 +89,16 @@ async fn example_with_fixed_point() -> Result<(), ()> {
 async fn example_advanced_config() -> Result<(), ()> {
     // 自定义配置
     let config = NewConfigBuilder::new()
-        .accel_scale(mpu6500::config::AccelScale::Scale4G)
-        .gyro_scale(mpu6500::config::GyroScale::Scale500)
-        .dlpf_config(mpu6500::config::DlpfConfig::Bandwidth20Hz)
+        .accel_scale(mpu6050::config::AccelScale::Scale4G)
+        .gyro_scale(mpu6050::config::GyroScale::Scale500)
+        .dlpf_config(mpu6050::config::DlpfConfig::Bandwidth20Hz)
         .sample_rate(100)
         .enable_fifo(true)
         .enable_interrupts(true)
         .build()
         .map_err(|_| ())?;
     
-    // let mut mpu: Mpu6500<_, _, f32> = Mpu6500::new(spi, cs, config);
+    // let mut mpu: Mpu6050<_, _, f32> = Mpu6050::new(spi, cs, config);
     
     // 初始化
     // mpu.init_with_config().await.map_err(|_| ())?;
@@ -125,23 +125,23 @@ async fn example_advanced_config() -> Result<(), ()> {
 }
 
 /// 错误处理示例
-async fn example_error_handling() -> Result<(), mpu6500::Mpu6500Error<()>> {
+async fn example_error_handling() -> Result<(), mpu6050::Mpu6050Error<()>> {
     // 使用Result类型进行错误处理
     let config = NewConfigBuilder::new()
         .sample_rate(100) // 有效的采样率
         .build()?; // 使用?操作符处理错误
     
-    // let mut mpu: Mpu6500<_, _, f32> = Mpu6500::new(spi, cs, config);
+    // let mut mpu: Mpu6050<_, _, f32> = Mpu6050::new(spi, cs, config);
     
     // 使用统一的错误类型
     // match mpu.init_with_config().await {
     //     Ok(_) => {
     //         // 初始化成功
     //     }
-    //     Err(mpu6500::Mpu6500Error::Spi(_)) => {
+    //     Err(mpu6050::Mpu6050Error::Spi(_)) => {
     //         // SPI通信错误
     //     }
-    //     Err(mpu6500::Mpu6500Error::DeviceNotFound) => {
+    //     Err(mpu6050::Mpu6050Error::DeviceNotFound) => {
     //         // 设备未找到
     //     }
     //     Err(e) => {
@@ -223,11 +223,11 @@ fn example_backward_compatibility() {
     
     // 新的方式（推荐）：
     let _config = NewConfigBuilder::new()
-        .accel_scale(mpu6500::config::AccelScale::Scale2G)
+        .accel_scale(mpu6050::config::AccelScale::Scale2G)
         .build()
         .unwrap();
     
     // 类型别名提供向后兼容性：
-    // type OldMpu6500<SPI, CS> = mpu6500::Mpu6500F32<SPI, CS>;
-    // type OldSensorData = mpu6500::SensorDataF32;
+    // type OldMpu6050<SPI, CS> = mpu6050::Mpu6050F32<SPI, CS>;
+    // type OldSensorData = mpu6050::SensorDataF32;
 }

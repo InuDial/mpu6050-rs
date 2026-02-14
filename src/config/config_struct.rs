@@ -54,8 +54,8 @@ impl ConfigBuilder {
         self.enable_interrupts = enable_interrupts;
         self
     }
-    pub fn build(self) -> Mpu6500Config {
-        Mpu6500Config {
+    pub fn build(self) -> Mpu6050Config {
+        Mpu6050Config {
             accel_scale: self.accel_scale,
             gyro_scale: self.gyro_scale,
             dlpf_config: self.dlpf_config,
@@ -69,7 +69,7 @@ impl ConfigBuilder {
 }
 
 #[derive(Clone, Debug)]
-pub struct Mpu6500Config {
+pub struct Mpu6050Config {
     pub accel_scale: AccelScale,
     pub gyro_scale: GyroScale,
     pub dlpf_config: super::DlpfConfig,
@@ -80,7 +80,7 @@ pub struct Mpu6500Config {
     pub low_power_mode: bool,
 }
 
-impl Default for Mpu6500Config {
+impl Default for Mpu6050Config {
     fn default() -> Self {
         Self {
             accel_scale: AccelScale::Scale2G,
@@ -95,14 +95,14 @@ impl Default for Mpu6500Config {
     }
 }
 
-impl Mpu6500Config {
+impl Mpu6050Config {
     pub fn new(builder: ConfigBuilder) -> Self {
         builder.build()
     }
 }
 
 pub fn calculate_sample_rate_divider(desired_rate: u16) -> u8 {
-    // MPU6500内部时钟为1kHz，采样率 = 1000 / (1 + SMPLRT_DIV)
+    // MPU6050内部时钟为1kHz，采样率 = 1000 / (1 + SMPLRT_DIV)
     if desired_rate >= 1000 {
         0
     } else if desired_rate <= 1 {

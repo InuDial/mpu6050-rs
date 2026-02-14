@@ -8,14 +8,14 @@ pub mod numeric;
 pub mod register;
 pub mod util;
 
-pub use crate::config::Mpu6500Config;
-pub use crate::error::{DeviceStatus, Mpu6500Error, Result, SensorStatus, SensorType};
+pub use crate::config::Mpu6050Config;
+pub use crate::error::{DeviceStatus, Mpu6050Error, Result, SensorStatus, SensorType};
 pub use crate::numeric::{FixedI8F24, FixedI16F16, NumericConverter, NumericType};
 
 pub const DEG2RAD: f32 = core::f32::consts::PI / 180.0;
 pub const RAD2DEG: f32 = 180.0 / core::f32::consts::PI;
 
-/// MPU6500 数据快照结构体（泛型版本）
+/// MPU6050 数据快照结构体（泛型版本）
 #[repr(C)]
 #[derive(Debug, Clone)]
 pub struct SensorData<T: NumericType> {
@@ -37,34 +37,34 @@ impl<T: NumericType> Default for SensorData<T> {
 /// 向后兼容的f32版本
 pub type SensorDataF32 = SensorData<f32>;
 
-/// 向后兼容的f32版本MPU6500
-pub type Mpu6500F32<SPI, CS> = Mpu6500<SPI, CS, f32>;
+/// 向后兼容的f32版本MPU6050
+pub type Mpu6050F32<SPI, CS> = Mpu6050<SPI, CS, f32>;
 
 /// 向后兼容的f32版本Builder
-pub type Mpu6500BuilderF32<SPI, CS> = Mpu6500Builder<SPI, CS, f32>;
+pub type Mpu6050BuilderF32<SPI, CS> = Mpu6050Builder<SPI, CS, f32>;
 
-/// MPU6500 链式构建器
-pub struct Mpu6500Builder<SPI, CS, T: NumericType = f32> {
+/// MPU6050 链式构建器
+pub struct Mpu6050Builder<SPI, CS, T: NumericType = f32> {
     spi: Option<SPI>,
     cs: Option<CS>,
-    config: Mpu6500Config,
+    config: Mpu6050Config,
     accel_offset: (i16, i16, i16),
     gyro_offset: (i16, i16, i16),
     initial_attitude: (T, T, T),
 }
 
-impl<SPI, CS, T: NumericType> Default for Mpu6500Builder<SPI, CS, T> {
+impl<SPI, CS, T: NumericType> Default for Mpu6050Builder<SPI, CS, T> {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl<SPI, CS, T: NumericType> Mpu6500Builder<SPI, CS, T> {
+impl<SPI, CS, T: NumericType> Mpu6050Builder<SPI, CS, T> {
     pub fn new() -> Self {
         Self {
             spi: None,
             cs: None,
-            config: Mpu6500Config::default(),
+            config: Mpu6050Config::default(),
             accel_offset: (0, 0, 0),
             gyro_offset: (0, 0, 0),
             initial_attitude: (T::zero(), T::zero(), T::zero()),
@@ -78,7 +78,7 @@ impl<SPI, CS, T: NumericType> Mpu6500Builder<SPI, CS, T> {
         self.cs = Some(cs);
         self
     }
-    pub fn config(mut self, config: Mpu6500Config) -> Self {
+    pub fn config(mut self, config: Mpu6050Config) -> Self {
         self.config = config;
         self
     }
@@ -94,8 +94,8 @@ impl<SPI, CS, T: NumericType> Mpu6500Builder<SPI, CS, T> {
         self.initial_attitude = (pitch, roll, yaw);
         self
     }
-    pub fn build(self) -> Mpu6500<SPI, CS, T> {
-        Mpu6500 {
+    pub fn build(self) -> Mpu6050<SPI, CS, T> {
+        Mpu6050 {
             spi: self.spi.expect("SPI未设置"),
             cs: self.cs.expect("CS未设置"),
             config: self.config,
@@ -109,11 +109,11 @@ impl<SPI, CS, T: NumericType> Mpu6500Builder<SPI, CS, T> {
     }
 }
 
-/// MPU6500 主结构体
-pub struct Mpu6500<SPI, CS, T: NumericType = f32> {
+/// MPU6050 主结构体
+pub struct Mpu6050<SPI, CS, T: NumericType = f32> {
     pub(crate) spi: SPI,
     pub(crate) cs: CS,
-    pub(crate) config: Mpu6500Config,
+    pub(crate) config: Mpu6050Config,
     pub(crate) accel_offset: (i16, i16, i16),
     pub(crate) gyro_offset: (i16, i16, i16),
     // pub(crate) last_update: Option<u64>,

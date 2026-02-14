@@ -1,6 +1,6 @@
-//! MPU6500 驱动相关API，详见 [`Mpu6500`] 结构体。
+//! MPU6050 驱动相关API，详见 [`Mpu6050`] 结构体。
 
-pub use crate::Mpu6500;
+pub use crate::Mpu6050;
 
 mod calibrate;
 mod config_ops;
@@ -10,21 +10,21 @@ mod power;
 mod read;
 mod reg_rw;
 
-use crate::config::Mpu6500Config;
+use crate::config::Mpu6050Config;
 use crate::config::calculate_sample_rate_divider;
 use crate::register::*;
 use embassy_time::Timer;
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::spi::SpiBus;
 
-impl<SPI, CS, T> Mpu6500<SPI, CS, T>
+impl<SPI, CS, T> Mpu6050<SPI, CS, T>
 where
     SPI: SpiBus<u8>,
     CS: OutputPin,
     T: crate::numeric::NumericType,
 {
-    /// 创建新的MPU6500实例
-    pub fn new(spi: SPI, cs: CS, config: Mpu6500Config) -> Self {
+    /// 创建新的MPU6050实例
+    pub fn new(spi: SPI, cs: CS, config: Mpu6050Config) -> Self {
         Self {
             spi,
             cs,

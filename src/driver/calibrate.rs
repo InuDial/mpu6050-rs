@@ -1,10 +1,10 @@
-use crate::Mpu6500;
+use crate::Mpu6050;
 
 use embassy_time::Timer;
 use embedded_hal::digital::OutputPin;
 use embedded_hal_async::spi::SpiBus;
 
-impl<SPI, CS, T> Mpu6500<SPI, CS, T>
+impl<SPI, CS, T> Mpu6050<SPI, CS, T>
 where
     SPI: SpiBus<u8>,
     CS: OutputPin,

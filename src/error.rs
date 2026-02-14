@@ -4,9 +4,9 @@
 
 use core::fmt;
 
-/// MPU6500库的统一错误类型
+/// MPU6050库的统一错误类型
 #[derive(Debug, Clone, PartialEq)]
-pub enum Mpu6500Error<SpiError> {
+pub enum Mpu6050Error<SpiError> {
     /// SPI通信错误
     Spi(SpiError),
     /// 设备未找到或ID不匹配
@@ -25,37 +25,37 @@ pub enum Mpu6500Error<SpiError> {
     ConversionError,
 }
 
-impl<SpiError> fmt::Display for Mpu6500Error<SpiError>
+impl<SpiError> fmt::Display for Mpu6050Error<SpiError>
 where
     SpiError: fmt::Display,
 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Mpu6500Error::Spi(e) => write!(f, "SPI error: {e}"),
-            Mpu6500Error::DeviceNotFound => write!(f, "MPU6500 device not found"),
-            Mpu6500Error::InvalidConfig => write!(f, "Invalid configuration"),
-            Mpu6500Error::CalibrationFailed => write!(f, "Sensor calibration failed"),
-            Mpu6500Error::DataReadFailed => write!(f, "Failed to read sensor data"),
-            Mpu6500Error::FifoError => write!(f, "FIFO operation error"),
-            Mpu6500Error::InterruptError => write!(f, "Interrupt configuration error"),
-            Mpu6500Error::ConversionError => write!(f, "Numeric conversion error"),
+            Mpu6050Error::Spi(e) => write!(f, "SPI error: {e}"),
+            Mpu6050Error::DeviceNotFound => write!(f, "MPU6050 device not found"),
+            Mpu6050Error::InvalidConfig => write!(f, "Invalid configuration"),
+            Mpu6050Error::CalibrationFailed => write!(f, "Sensor calibration failed"),
+            Mpu6050Error::DataReadFailed => write!(f, "Failed to read sensor data"),
+            Mpu6050Error::FifoError => write!(f, "FIFO operation error"),
+            Mpu6050Error::InterruptError => write!(f, "Interrupt configuration error"),
+            Mpu6050Error::ConversionError => write!(f, "Numeric conversion error"),
         }
     }
 }
 
-impl<SpiError> From<SpiError> for Mpu6500Error<SpiError> {
+impl<SpiError> From<SpiError> for Mpu6050Error<SpiError> {
     fn from(error: SpiError) -> Self {
-        Mpu6500Error::Spi(error)
+        Mpu6050Error::Spi(error)
     }
 }
 
 /// 结果类型别名
-pub type Result<T, SpiError> = core::result::Result<T, Mpu6500Error<SpiError>>;
+pub type Result<T, SpiError> = core::result::Result<T, Mpu6050Error<SpiError>>;
 
 /// 配置验证trait
 pub trait ConfigValidation {
     /// 验证配置是否有效
-    fn validate(&self) -> core::result::Result<(), Mpu6500Error<()>>;
+    fn validate(&self) -> core::result::Result<(), Mpu6050Error<()>>;
 }
 
 /// 设备状态枚举

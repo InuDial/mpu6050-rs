@@ -4,7 +4,7 @@
 
 use core::fmt::Debug;
 
-/// 数值类型trait，定义了MPU6500库中需要的所有数值运算
+/// 数值类型trait，定义了MPU6050库中需要的所有数值运算
 pub trait NumericType:
     Copy
     + Clone

@@ -8,7 +8,7 @@ const ALPHA: f32 = 0.98;
 /// 设备ID寄存器地址
 pub const WHO_AM_I: u8 = 0x75;
 /// 设备ID期望值
-pub const WHO_AM_I_VALUE: u8 = 0x70;
+pub const WHO_AM_I_VALUE: u8 = 0x68;
 
 // ===== 电源管理相关寄存器 =====
 /// 电源管理1寄存器
@@ -24,7 +24,7 @@ pub const GYRO_CONFIG: u8 = 0x1B;
 /// 加速度计配置寄存器
 pub const ACCEL_CONFIG: u8 = 0x1C;
 /// 加速度计配置2寄存器
-pub const ACCEL_CONFIG2: u8 = 0x1D;
+// pub const ACCEL_CONFIG2: u8 = 0x1D;
 
 // ===== 采样率相关寄存器 =====
 /// 采样率分频寄存器
